@@ -383,12 +383,16 @@ h2.s-title {
 .hero-photo-col {
   position: relative;
   height: 580px;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-top: 40px;
+  padding-right: 20px;
 }
 
 .photo-frame {
   position: relative;
-  width: 340px; height: 460px;
+  width: 380px; height: 400px;
 }
 
 .photo-border {
