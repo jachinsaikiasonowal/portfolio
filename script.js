@@ -224,3 +224,105 @@ function initTilt() {
     });
   });
 }
+
+
+/* ─────────────────────────────────────────────────────────────
+   11. ACTIVE NAV — highlights current section link on scroll
+───────────────────────────────────────────────────────────────*/
+(function() {
+  var sections = document.querySelectorAll('section[id], div[id]');
+  var navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+
+  function onScroll() {
+    var scrollY = window.scrollY + 120;
+    var current = '';
+    sections.forEach(function(sec) {
+      if (sec.offsetTop <= scrollY) current = sec.id;
+    });
+    navLinks.forEach(function(a) {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+
+/* ─────────────────────────────────────────────────────────────
+   12. MAGNETIC BUTTONS — subtle cursor attraction on hover
+───────────────────────────────────────────────────────────────*/
+document.querySelectorAll('.btn-gold, .btn-ghost, .nav-hire').forEach(function(btn) {
+  btn.addEventListener('mousemove', function(e) {
+    var r = btn.getBoundingClientRect();
+    var dx = (e.clientX - (r.left + r.width  / 2)) * 0.18;
+    var dy = (e.clientY - (r.top  + r.height / 2)) * 0.18;
+    btn.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+  });
+  btn.addEventListener('mouseleave', function() {
+    btn.style.transform = '';
+  });
+});
+
+
+/* ─────────────────────────────────────────────────────────────
+   13. STAGGER REVEAL — child elements inside grid sections
+        fire in sequence rather than all at once
+───────────────────────────────────────────────────────────────*/
+(function() {
+  var grids = document.querySelectorAll('.services-grid, .skills-grid, .certs-grid, .tgrid');
+  grids.forEach(function(grid) {
+    var children = grid.children;
+    for (var i = 0; i < children.length; i++) {
+      children[i].style.transitionDelay = (i * 0.05) + 's';
+    }
+  });
+})();
+
+
+/* ─────────────────────────────────────────────────────────────
+   14. CURSOR TRAIL — faint ghost dots that follow the cursor
+───────────────────────────────────────────────────────────────*/
+(function() {
+  var TRAIL_COUNT = 6;
+  var trail = [];
+  var positions = [];
+
+  for (var i = 0; i < TRAIL_COUNT; i++) {
+    var dot = document.createElement('div');
+    dot.style.cssText = [
+      'position:fixed', 'pointer-events:none',
+      'border-radius:50%', 'z-index:2147483640',
+      'width:' + (4 - i * 0.5) + 'px',
+      'height:' + (4 - i * 0.5) + 'px',
+      'background:rgba(201,168,76,' + (0.25 - i * 0.04) + ')',
+      'transform:translate(-50%,-50%)',
+      'transition:opacity 0.3s',
+      'top:0', 'left:0'
+    ].join(';');
+    document.body.appendChild(dot);
+    trail.push(dot);
+    positions.push({ x: 0, y: 0 });
+  }
+
+  var trailMx = 0, trailMy = 0;
+  document.addEventListener('mousemove', function(e) {
+    trailMx = e.clientX; trailMy = e.clientY;
+  });
+
+  function animTrail() {
+    positions[0].x += (trailMx - positions[0].x) * 0.35;
+    positions[0].y += (trailMy - positions[0].y) * 0.35;
+    for (var j = 1; j < TRAIL_COUNT; j++) {
+      positions[j].x += (positions[j-1].x - positions[j].x) * 0.45;
+      positions[j].y += (positions[j-1].y - positions[j].y) * 0.45;
+    }
+    for (var k = 0; k < TRAIL_COUNT; k++) {
+      trail[k].style.left = positions[k].x + 'px';
+      trail[k].style.top  = positions[k].y + 'px';
+    }
+    requestAnimationFrame(animTrail);
+  }
+  animTrail();
+})();
