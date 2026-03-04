@@ -42,7 +42,7 @@ body {
   background: var(--gold);
   border-radius: 50%;
   position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9999;
+  pointer-events: none; z-index: 2147483647;
   transform: translate(-50%, -50%);
   transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
   mix-blend-mode: difference;
@@ -52,13 +52,14 @@ body {
   border: 1px solid rgba(201,168,76,0.5);
   border-radius: 50%;
   position: fixed; top: 0; left: 0;
-  pointer-events: none; z-index: 9998;
+  pointer-events: none; z-index: 2147483646;
   transform: translate(-50%, -50%);
   transition: transform 0.12s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
 }
 body:has(a:hover) #cursor { width: 20px; height: 20px; }
 body:has(a:hover) #cursor-ring { width: 50px; height: 50px; opacity: 0.5; }
 body:has(button:hover) #cursor { width: 20px; height: 20px; }
+a, button, [onclick], .svc, .pcard, .exp-trigger, .stag, .achip, .hchip, .m-item, .vcard { cursor: none !important; }
 
 /* ═══════════════════════════════════════════════
    SCROLLBAR
@@ -602,7 +603,7 @@ h2.s-title {
 ═══════════════════════════════════════════════ */
 #services { background: var(--black2); }
 
-.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); }
+.services-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border2); }
 
 .svc {
   background: var(--black2); padding: 40px 36px;
@@ -754,7 +755,7 @@ h2.s-title {
 ═══════════════════════════════════════════════ */
 #skills { background: var(--black2); }
 
-.skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); }
+.skills-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border2); }
 .sb {
   background: var(--black2); padding: 32px;
   transition: background 0.3s;
@@ -808,8 +809,8 @@ h2.s-title {
 ═══════════════════════════════════════════════ */
 #portfolio { background: var(--black2); }
 .port-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); }
-.port-grid .pcard:last-child:nth-child(3n+1) { grid-column: 1 / -1; }
-.port-grid .pcard:nth-last-child(1):nth-child(3n+1) .ptumb { aspect-ratio: 32/10; }
+.port-grid .pcard:first-child { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+.port-grid .pcard:first-child .ptumb { aspect-ratio: unset; min-height: 240px; }
 .pcard {
   background: var(--black2); overflow: hidden;
   transition: all 0.3s; cursor: pointer; position: relative;
@@ -1036,6 +1037,7 @@ footer {
   .metrics-row { grid-template-columns: repeat(3, 1fr); }
   .about-grid { grid-template-columns: 1fr; gap: 60px; }
   .services-grid, .skills-grid, .port-grid, .certs-grid, .tgrid, .edu-grid { grid-template-columns: 1fr; }
+  .services-grid, .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .exp-results { grid-template-columns: repeat(2, 1fr); }
   .wrap { padding: 0 20px; }
   .hero-name { font-size: clamp(60px, 14vw, 90px); }
@@ -1045,6 +1047,6 @@ footer {
   .hstat:nth-child(2n) { border-right: none; margin-right: 0; }
   .metrics-row { grid-template-columns: repeat(2, 1fr); }
   .cta-contacts { flex-direction: column; gap: 16px; align-items: center; }
-  .port-grid .pcard:last-child:nth-child(3n+1) { grid-column: auto; }
-  .port-grid .pcard:nth-last-child(1):nth-child(3n+1) .ptumb { aspect-ratio: 16/10; }
+  .port-grid .pcard:first-child { grid-column: auto; display: block; }
+  .port-grid .pcard:first-child .ptumb { aspect-ratio: 16/10; min-height: unset; }
 }
