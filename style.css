@@ -536,6 +536,168 @@ h2.s-title {
   transition: all 0.2s; white-space: nowrap;
 }
 .achip:hover { border-color: var(--gold); color: var(--gold); }
+/* ─── ABOUT CHIPS — Restructured Layout ─── */
+.about-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 36px;
+}
+
+.chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ─── PromptOps Hero CTA ─── */
+.chip-promptops {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.04) 100%);
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  padding: 18px 22px;
+  text-decoration: none;
+  color: var(--gold);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  /* Outer glow pulse */
+  animation: promptopsPulse 3s ease-in-out infinite;
+}
+
+/* Shimmer sweep */
+.chip-promptops::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201,168,76,0.18),
+    transparent
+  );
+  animation: promptopsShimmer 2.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Top-edge gold line growing in */
+.chip-promptops::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--gold2), var(--gold));
+  transform: scaleX(0.5);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+  animation: promptopsTopBar 3s ease-in-out infinite;
+}
+
+.chip-promptops:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(201,168,76,0.18);
+  background: linear-gradient(135deg, rgba(201,168,76,0.18) 0%, rgba(201,168,76,0.08) 100%);
+  animation: none; /* stop pulse on hover so it feels snappy */
+}
+
+.chip-promptops:hover::after { transform: scaleX(1); }
+
+@keyframes promptopsPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.0); }
+  50%       { box-shadow: 0 0 0 6px rgba(201,168,76,0.08), 0 0 20px rgba(201,168,76,0.06); }
+}
+
+@keyframes promptopsShimmer {
+  0%   { left: -120%; }
+  60%  { left: 160%; }
+  100% { left: 160%; }
+}
+
+@keyframes promptopsTopBar {
+  0%, 100% { transform: scaleX(0.5); opacity: 0.6; }
+  50%       { transform: scaleX(1);   opacity: 1; }
+}
+
+.chip-po-inner { display: flex; flex-direction: column; gap: 4px; }
+
+.chip-po-top {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 4px;
+}
+
+.chip-po-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-c); font-size: 9px;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--gold); opacity: 0.8;
+}
+
+.chip-po-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold);
+  animation: sonar 2s infinite; /* reuses existing sonar keyframe */
+}
+
+.chip-po-arrow {
+  font-size: 14px; color: var(--gold); opacity: 0.5;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.chip-promptops:hover .chip-po-arrow { opacity: 1; transform: translate(2px, -2px); }
+
+.chip-po-title {
+  font-family: var(--font-d);
+  font-size: 24px; letter-spacing: 2px;
+  color: var(--white);
+  display: block;
+}
+
+.chip-po-sub {
+  font-family: var(--font-c); font-size: 11px;
+  letter-spacing: 1px; color: var(--grey); display: block;
+}
+
+/* ─── Product chips (Newsletter, Bundle) ─── */
+.achip-product {
+  display: inline-flex; align-items: center; gap: 8px;
+  border-color: rgba(201,168,76,0.25) !important;
+  color: var(--grey2) !important;
+  padding: 10px 18px;
+  transition: all 0.2s;
+}
+.achip-product:hover {
+  border-color: var(--gold) !important;
+  color: var(--white) !important;
+  background: rgba(201,168,76,0.05);
+}
+.achip-icon { font-size: 14px; }
+.achip-stat {
+  font-family: var(--font-c); font-size: 9px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--gold); opacity: 0.7;
+  border-left: 1px solid var(--border);
+  padding-left: 8px; margin-left: 4px;
+}
+
+/* ─── Status chips (Location, Timezone) ─── */
+.achip-status {
+  border-style: dashed !important;
+  border-color: var(--border2) !important;
+  color: var(--grey) !important;
+  font-size: 10px !important;
+  letter-spacing: 1.5px !important;
+  opacity: 0.8;
+  cursor: default;
+}
+.achip-status:hover {
+  border-color: var(--border) !important;
+  color: var(--grey2) !important;
+  background: none !important;
+}
 
 /* ─── Value Cards — stacked list ─── */
 .values-list { display: flex; flex-direction: column; gap: 1px; }
@@ -727,6 +889,8 @@ h2.s-title {
 ═══════════════════════════════════════════════ */
 #skills { background: var(--black2); }
 .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); }
+.sb:last-child { grid-column: 1 / -1; }
+.sb:last-child .stags { max-width: 900px; }
 .sb { background: var(--black2); padding: 32px; transition: background 0.3s; }
 .sb:hover { background: var(--black3); }
 .sb-title {
