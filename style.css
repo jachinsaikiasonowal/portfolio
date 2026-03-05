@@ -332,7 +332,7 @@ h2.s-title {
   margin-left: 2px;  /* Cursor closer to text */
   vertical-align: text-bottom;
   animation: cursor-blink 0.7s infinite;
-    opacity: 0;  /* ✅ ADD THIS */
+    opacity: 1;  /* ✅ ADD THIS */
   transition: opacity 0.2s ease;  /* ✅ ADD THIS */
 }
 
