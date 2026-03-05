@@ -335,13 +335,13 @@ h2.s-title {
 .type-cursor {
   display: inline-block;
   width: 3px;
-  height: 1.2em;
+  height: 1.1em;
   background: var(--gold);
-  margin-left: 0px;  /* Cursor closer to text */
-  vertical-align: text-bottom;
-    opacity: 0;  /* ✅ ADD THIS */
-  transition: opacity 0.2s ease;  /* ✅ ADD THIS */
+  margin-left: 4px;
+  vertical-align: middle;
+  animation: blink 0.9s step-end infinite;
 }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
 .hero-title {
   display: flex; 

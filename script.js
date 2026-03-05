@@ -46,6 +46,7 @@ function fireLoader() {
   initRevTicker();
   initMagneticBtns();
   initCaseScanAnim();
+  initTypewriter();
 }
 document.addEventListener('DOMContentLoaded', function() {
   var cntEl = document.getElementById('loader-count');
@@ -169,6 +170,29 @@ function startScramble() {
     });
   }, { threshold:0.5 });
   document.querySelectorAll('h2.s-title').forEach(function(h){ hIO.observe(h); });
+}
+
+/* ─────────────────────────────────────────────
+   TYPEWRITER ROLES — hero subtitle cycle
+───────────────────────────────────────────── */
+function initTypewriter() {
+  var el = document.getElementById('type-roles');
+  if (!el) return;
+  var roles = ['Growth Marketer', 'AI Agent Engineer', 'Newsletter Founder', 'Marketing Ops Lead', 'PromptOps Creator'];
+  var ri = 0, ci = 0, deleting = false;
+  function type() {
+    var current = roles[ri];
+    if (!deleting) {
+      el.textContent = current.slice(0, ++ci);
+      if (ci === current.length) { deleting = true; setTimeout(type, 2200); return; }
+      setTimeout(type, 80);
+    } else {
+      el.textContent = current.slice(0, --ci);
+      if (ci === 0) { deleting = false; ri = (ri + 1) % roles.length; setTimeout(type, 400); return; }
+      setTimeout(type, 40);
+    }
+  }
+  setTimeout(type, 1200);
 }
 
 /* ─────────────────────────────────────────────
