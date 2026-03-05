@@ -25,10 +25,10 @@
 ══════════════════════════════════════════════════════ -->
 <nav id="nav">
   <a href="#hero" class="nav-logo">JACHIN<span>.</span></a>
-  <ul class="nav-links">
-    <button class="nav-burger" onclick="toggleMobileNav(this)" aria-label="Menu">
-  <span></span><span></span><span></span>
-</button>
+  <button class="nav-burger" onclick="toggleMobileNav(this)" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Journey</a></li>
     <li><a href="#case-studies">Case Studies</a></li>
@@ -43,6 +43,62 @@
      HERO
 ══════════════════════════════════════════════════════ -->
 <section id="hero">
+  <!-- ① AMBIENT INTELLIGENCE HUD — Neural canvas background -->
+  <canvas id="neural-canvas" aria-hidden="true"></canvas>
+  <!-- Scan line sweep -->
+  <div class="hud-scanline" aria-hidden="true"></div>
+  <!-- HUD corner frames -->
+  <div class="hud-frame" aria-hidden="true">
+    <div class="hf tl"></div>
+    <div class="hf tr"></div>
+    <div class="hf bl"></div>
+    <div class="hf br"></div>
+    <!-- HUD data readouts -->
+    <div class="hud-readout hr-tl">
+      <span class="hud-key">SYS</span><span class="hud-val" id="hud-sys">ONLINE</span>
+    </div>
+    <div class="hud-readout hr-tr">
+      <span class="hud-key">LOC</span><span class="hud-val">GUW · REMOTE</span>
+    </div>
+    <div class="hud-readout hr-bl">
+      <span class="hud-key">STATUS</span><span class="hud-val hud-pulse">AVAILABLE</span>
+    </div>
+    <div class="hud-readout hr-br">
+      <span class="hud-key">VER</span><span class="hud-val">2026.1</span>
+    </div>
+  </div>
+
+  <!-- ⑧ OPERATIONS DASHBOARD PANEL — fixed to right edge -->
+  <div id="ops-dashboard" aria-label="Live metrics">
+    <div class="ops-title">OPS LIVE</div>
+    <div class="ops-row">
+      <div class="ops-lbl">Revenue</div>
+      <div class="ops-val">$<span class="ops-count" data-val="150">0</span>K+</div>
+      <div class="ops-bar"><div class="ops-fill" style="--w:82%"></div></div>
+    </div>
+    <div class="ops-row">
+      <div class="ops-lbl">Clients</div>
+      <div class="ops-val"><span class="ops-count" data-val="175">0</span>+</div>
+      <div class="ops-bar"><div class="ops-fill" style="--w:70%"></div></div>
+    </div>
+    <div class="ops-row">
+      <div class="ops-lbl">Waitlist</div>
+      <div class="ops-val"><span class="ops-count" data-val="247">0</span>+</div>
+      <div class="ops-bar"><div class="ops-fill" style="--w:55%"></div></div>
+    </div>
+    <div class="ops-row">
+      <div class="ops-lbl">Agents</div>
+      <div class="ops-val"><span class="ops-count" data-val="10">0</span>+</div>
+      <div class="ops-bar"><div class="ops-fill" style="--w:45%"></div></div>
+    </div>
+    <div class="ops-row">
+      <div class="ops-lbl">Open Rate</div>
+      <div class="ops-val"><span class="ops-count" data-val="38">0</span>%</div>
+      <div class="ops-bar"><div class="ops-fill" style="--w:38%"></div></div>
+    </div>
+    <div class="ops-status"><span class="ops-dot"></span>All systems nominal</div>
+  </div>
+
   <div class="hero-lines">
     <div class="hero-line h hl1"></div>
     <div class="hero-line h hl2"></div>
@@ -63,7 +119,8 @@
       <h1 class="hero-name reveal" style="transition-delay:.1s">
         <span id="scramble-name">JACHIN</span><br>
         <span class="outline">SAIKIA</span><br>
-        <span class="gold">SONOWAL</span>
+        <!-- ⑤ SONOWAL data stream hover -->
+        <span class="gold sonowal-stream" id="sonowal-el" data-text="SONOWAL">SONOWAL</span>
       </h1>
 
       <div class="hero-title reveal" style="transition-delay:.2s">
@@ -83,31 +140,39 @@
       </div>
 
       <div class="hero-stats reveal" style="transition-delay:.5s">
-        <div class="hstat">
+        <!-- ② STAT DECOMPOSITION on hover -->
+        <div class="hstat hstat-decomp">
           <div class="hstat-num" data-target="150" data-prefix="$" data-suffix="K+">$0K+</div>
           <div class="hstat-label">Revenue Generated</div>
+          <div class="hstat-detail">Tea D2C $145K · Product $3.8K · Consulting</div>
         </div>
-        <div class="hstat">
+        <div class="hstat hstat-decomp">
           <div class="hstat-num" data-target="175" data-suffix="+">0+</div>
           <div class="hstat-label">Clients Served</div>
+          <div class="hstat-detail">D2C · B2B · Govt · Healthcare · Political</div>
         </div>
-        <div class="hstat">
+        <div class="hstat hstat-decomp">
           <div class="hstat-num" data-target="247" data-suffix="+">0+</div>
           <div class="hstat-label">PromptOps Waitlist</div>
+          <div class="hstat-detail">8 countries · 12 beta teams · 0 ad spend</div>
         </div>
-        <div class="hstat">
+        <div class="hstat hstat-decomp">
           <div class="hstat-num" data-target="10" data-suffix="+">0+</div>
           <div class="hstat-label">AI Agents Built</div>
+          <div class="hstat-detail">Research · Draft · SEO · Support · Social</div>
         </div>
-        <div class="hstat">
+        <div class="hstat hstat-decomp">
           <div class="hstat-num" data-target="8" data-suffix="+">0+</div>
           <div class="hstat-label">Years Exp.</div>
+          <div class="hstat-detail">2017→2026 · Freelance → Founder</div>
         </div>
       </div>
     </div>
 
     <div class="hero-photo-col reveal" style="transition-delay:.3s">
-      <div class="photo-frame">
+      <!-- ⑦ LOAD-ONCE PHOTO GLITCH + CORNER LOCK -->
+      <div class="photo-frame photo-glitch-wrap" id="photo-frame">
+        <div class="photo-glitch-overlay" id="photo-glitch" aria-hidden="true"></div>
         <div class="photo-border"></div>
         <div class="photo-img">
           <div class="photo-placeholder">
@@ -302,6 +367,40 @@
     <p class="s-sub reveal" style="transition-delay:.15s">From early hustle to building AI products. Click any chapter to expand the full story.</p>
 
     <div class="exp-list reveal" style="transition-delay:.2s">
+
+      <!-- ③ REVENUE TIMELINE SVG — visual backbone of career -->
+      <div class="revenue-timeline-wrap" id="rev-timeline-wrap">
+        <svg id="rev-timeline" width="100%" height="64" viewBox="0 0 1000 64" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="revGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="rgba(201,168,76,0)"/>
+              <stop offset="15%" stop-color="rgba(201,168,76,0.6)"/>
+              <stop offset="85%" stop-color="rgba(201,168,76,0.6)"/>
+              <stop offset="100%" stop-color="rgba(201,168,76,0)"/>
+            </linearGradient>
+          </defs>
+          <!-- Revenue growth path — hand-tuned to career arc -->
+          <polyline id="rev-path"
+            points="0,56 120,52 220,46 300,38 380,28 460,18 540,14 620,10 700,8 800,6 900,4 1000,2"
+            fill="none" stroke="url(#revGrad)" stroke-width="1.5"
+            stroke-dasharray="1200" stroke-dashoffset="1200"/>
+          <!-- Milestone dots -->
+          <g id="rev-dots">
+            <circle class="rev-dot" cx="120" cy="52" r="3" data-label="Freelance Start" data-year="2017"/>
+            <circle class="rev-dot" cx="300" cy="38" r="3" data-label="First $10K Client" data-year="2019"/>
+            <circle class="rev-dot" cx="460" cy="18" r="4" data-label="$145K D2C Win" data-year="2022"/>
+            <circle class="rev-dot" cx="620" cy="10" r="3" data-label="Newsletter Launch" data-year="2024"/>
+            <circle class="rev-dot" cx="800" cy="6" r="4" data-label="AI Agent Suite" data-year="2025"/>
+            <circle class="rev-dot" cx="950" cy="3" r="5" data-label="PromptOps" data-year="2026"/>
+          </g>
+          <!-- Tooltip placeholder -->
+          <g id="rev-tooltip" opacity="0">
+            <rect rx="2" fill="rgba(15,15,15,0.9)" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
+            <text id="rev-tip-label" fill="#C9A84C" font-size="9" font-family="'Barlow Condensed',sans-serif" letter-spacing="1.5"></text>
+            <text id="rev-tip-year" fill="#888070" font-size="8" font-family="'Barlow Condensed',sans-serif" letter-spacing="1"></text>
+          </g>
+        </svg>
+      </div>
 
       <!-- ERA 0 — Pre-Job Foundations -->
       <div class="exp-item" onclick="toggleExp(this)">
@@ -618,6 +717,13 @@
   </div>
 </section>
 
+<!-- ⑨ SINGLE HORIZONTAL CUT TRANSITION -->
+<div id="section-cut" aria-hidden="true">
+  <div class="cut-line"></div>
+  <div class="cut-label">CASE STUDIES</div>
+  <div class="cut-line"></div>
+</div>
+
 <!-- ══════════════════════════════════════════════════════
      CASE STUDIES — Full Narrative
 ══════════════════════════════════════════════════════ -->
@@ -631,7 +737,16 @@
     </div>
 
     <!-- ─── CASE STUDY 01 — TEA BRAND D2C ─── -->
-    <div class="cs-card reveal" style="transition-delay:.2s" onclick="toggleCS(this)">
+    <div class="cs-card reveal cs-pipeline" style="transition-delay:.2s" onclick="toggleCS(this)">
+      <div class="cs-pipeline-bar" aria-hidden="true">
+        <div class="cpb-step cpb-done">BRIEF</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-done">STRATEGY</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-done">EXECUTION</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-active">RESULT: $145K+</div>
+      </div>
       <div class="cs-header">
         <div class="cs-index">01</div>
         <div class="cs-header-main">
@@ -749,7 +864,16 @@
     </div>
 
     <!-- ─── CASE STUDY 02 — POLITICAL CAMPAIGN ─── -->
-    <div class="cs-card reveal" style="transition-delay:.25s" onclick="toggleCS(this)">
+    <div class="cs-card reveal cs-pipeline" style="transition-delay:.25s" onclick="toggleCS(this)">
+      <div class="cs-pipeline-bar" aria-hidden="true">
+        <div class="cpb-step cpb-done">BRIEF</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-done">TEAM BUILD</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-done">45-DAY OPS</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-active">RESULT: 2.5M+</div>
+      </div>
       <div class="cs-header">
         <div class="cs-index">02</div>
         <div class="cs-header-main">
@@ -861,7 +985,16 @@
     </div>
 
     <!-- ─── CASE STUDY 03 — LOCAL SEO ─── -->
-    <div class="cs-card reveal" style="transition-delay:.3s" onclick="toggleCS(this)">
+    <div class="cs-card reveal cs-pipeline" style="transition-delay:.3s" onclick="toggleCS(this)">
+      <div class="cs-pipeline-bar" aria-hidden="true">
+        <div class="cpb-step cpb-done">AUDIT</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-done">CLEANUP</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-done">REPUTATION</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-active">RESULT: 3× GROWTH</div>
+      </div>
       <div class="cs-header">
         <div class="cs-index">03</div>
         <div class="cs-header-main">
@@ -936,7 +1069,16 @@
     </div>
 
     <!-- ─── CASE STUDY 04 — AI NEWS INDIA / NEWSLETTER ─── -->
-    <div class="cs-card reveal" style="transition-delay:.35s" onclick="toggleCS(this)">
+    <div class="cs-card reveal cs-pipeline" style="transition-delay:.35s" onclick="toggleCS(this)">
+      <div class="cs-pipeline-bar" aria-hidden="true">
+        <div class="cpb-step cpb-done">0 SUBS</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-done">50+ A/B TESTS</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-done">1K+ SUBS</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-active">$3.8K REVENUE</div>
+      </div>
       <div class="cs-header">
         <div class="cs-index">04</div>
         <div class="cs-header-main">
@@ -1011,7 +1153,16 @@
     </div>
 
     <!-- ─── CASE STUDY 05 — PROMPTOPS ─── -->
-    <div class="cs-card reveal" style="transition-delay:.4s" onclick="toggleCS(this)">
+    <div class="cs-card reveal cs-pipeline" style="transition-delay:.4s" onclick="toggleCS(this)">
+      <div class="cs-pipeline-bar" aria-hidden="true">
+        <div class="cpb-step cpb-done">PAIN POINT</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-done">BUILD</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-done">GTM</div>
+        <div class="cpb-arrow">→</div>
+        <div class="cpb-step cpb-active">247+ WAITLIST</div>
+      </div>
       <div class="cs-header">
         <div class="cs-index">05</div>
         <div class="cs-header-main">
@@ -1528,6 +1679,9 @@
   <div class="f-logo">JACHIN<span>.</span></div>
   <div class="f-note">© 2026 Jachin Saikia Sonowal · Growth Marketer · AI Builder · Founder of PromptOps</div>
 </footer>
+
+<!-- ⑩ IDLE-REACTIVE GRAIN OVERLAY — intensifies after 8s idle -->
+<div id="idle-grain" aria-hidden="true"></div>
 
 <script src="script.js"></script>
 </body>
