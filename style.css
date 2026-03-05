@@ -1854,26 +1854,32 @@ footer { justify-content:space-between; }
 /* ═══════════════════════════════════════════════
    TYPING ANIMATION
 ═══════════════════════════════════════════════ */
-/* TYPING ANIMATION - JAVASCRIPT DRIVEN */
-#typing-text {
-  display: inline;
-  color: var(--white);
-}
-
-.typing-cursor {
+/* TYPING ANIMATION - FIXED WIDTH (NO LAYOUT SHIFT) */
+#type-roles {
   display: inline-block;
-  color: var(--gold);
-  font-weight: bold;
-  margin-left: 2px;
-  animation: blink 0.7s infinite;
+  min-width: 280px;
+  height: 1.2em;
+  color: var(--white);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
-@keyframes blink {
+.type-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1.2em;
+  background: var(--gold);
+  margin-left: 4px;
+  vertical-align: text-bottom;
+  animation: cursor-blink 0.7s infinite;
+}
+
+@keyframes cursor-blink {
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0; }
 }
 
-.typing-cursor.complete {
+.type-cursor.complete {
   animation: none;
   opacity: 0;
 }
