@@ -10,6 +10,49 @@
 </head>
 <body>
 
+<!-- CROSSHAIR CURSOR -->
+<div id="crosshair" aria-hidden="true">
+  <div class="ch-line ch-l"></div>
+  <div class="ch-line ch-r"></div>
+  <div class="ch-line ch-t"></div>
+  <div class="ch-line ch-b"></div>
+  <div class="ch-corner tl"></div>
+  <div class="ch-corner tr"></div>
+  <div class="ch-corner bl"></div>
+  <div class="ch-corner br"></div>
+  <div class="ch-dot"></div>
+</div>
+
+<!-- REVENUE TICKER -->
+<div id="rev-ticker" aria-label="Live revenue counter">
+  <span id="rev-ticker-val">$145,000</span>
+  <span id="rev-ticker-lbl">Est. Client Revenue</span>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress" aria-hidden="true"></div>
+
+<!-- AMBIENT HUD -->
+<div id="ambient-hud" aria-live="polite">
+  <span class="ahud-dot"></span>
+  <span class="ahud-text" id="ahud-text"></span>
+</div>
+
+<!-- TERMINAL OVERLAY -->
+<div id="terminal-overlay" aria-hidden="true">
+  <div class="term-inner">
+    <div class="term-header">
+      <span class="term-dot td-red"></span>
+      <span class="term-dot td-yellow"></span>
+      <span class="term-dot td-green"></span>
+      <span class="term-title">JACHIN_OS v2026.1</span>
+      <button class="term-close" onclick="closeTerminal()">ESC</button>
+    </div>
+    <div class="term-body" id="term-body"></div>
+    <div class="term-hint">Press <kbd>ESC</kbd> to close &nbsp;·&nbsp; Type <kbd>JACHIN</kbd> anywhere to open</div>
+  </div>
+</div>
+
 <!-- CURSOR -->
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
@@ -18,6 +61,7 @@
 <div id="loader">
   <div class="loader-text">JACHIN</div>
   <div class="loader-bar"></div>
+  <div class="loader-count" id="loader-count">0</div>
 </div>
 
 <!-- ══════════════════════════════════════════════════════
@@ -118,7 +162,7 @@
 
       <h1 class="hero-name reveal" style="transition-delay:.1s">
         <span id="scramble-name">JACHIN</span><br>
-        <span class="outline">SAIKIA</span><br>
+        <span class="outline saikia-haze" id="saikia-el">SAIKIA</span><br>
         <!-- ⑤ SONOWAL data stream hover -->
         <span class="gold sonowal-stream" id="sonowal-el" data-text="SONOWAL">SONOWAL</span>
       </h1>
@@ -195,6 +239,7 @@
       </div>
     </div>
   </div>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
 </section>
 
 <!-- MARQUEE STRIP -->
@@ -1676,10 +1721,40 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="f-logo">JACHIN<span>.</span></div>
-  <div class="f-note">© 2026 Jachin Saikia Sonowal · Growth Marketer · AI Builder · Founder of PromptOps</div>
+  <div class="f-logo">J
+ACHIN<span>.</span></div>
+  <div class="f-right">
+    <div class="f-clock" id="f-clock">--:--:-- --</div>
+    <div class="f-note">© 2026 Jachin Saikia Sonowal · Growth Marketer · AI Builder · Founder of PromptOps</div>
+  </div>
 </footer>
 
+<!-- REVERSE MARQUEE -->
+<div id="strip2" aria-hidden="true">
+  <div class="strip2-track">
+    <span class="strip2-item">$150K+ Client Revenue <span class="strip-dot"></span></span>
+    <span class="strip2-item">247+ PromptOps Waitlist <span class="strip-dot"></span></span>
+    <span class="strip2-item">175+ Clients Served <span class="strip-dot"></span></span>
+    <span class="strip2-item">38% Email Open Rate <span class="strip-dot"></span></span>
+    <span class="strip2-item">10+ AI Agents Live <span class="strip-dot"></span></span>
+    <span class="strip2-item">8+ Years Experience <span class="strip-dot"></span></span>
+    <span class="strip2-item">2.5M+ Campaign Impressions <span class="strip-dot"></span></span>
+    <span class="strip2-item">$3.8K Product Revenue <span class="strip-dot"></span></span>
+    <span class="strip2-item">$150K+ Client Revenue <span class="strip-dot"></span></span>
+    <span class="strip2-item">247+ PromptOps Waitlist <span class="strip-dot"></span></span>
+    <span class="strip2-item">175+ Clients Served <span class="strip-dot"></span></span>
+    <span class="strip2-item">38% Email Open Rate <span class="strip-dot"></span></span>
+    <span class="strip2-item">10+ AI Agents Live <span class="strip-dot"></span></span>
+    <span class="strip2-item">8+ Years Experience <span class="strip-dot"></span></span>
+    <span class="strip2-item">2.5M+ Campaign Impressions <span class="strip-dot"></span></span>
+    <span class="strip2-item">$3.8K Product Revenue <span class="strip-dot"></span></span>
+  </div>
+</div>
+
+<!-- BACK TO TOP -->
+<button id="btt" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- IDLE GRAIN -->
 <div id="idle-grain" aria-hidden="true"></div>
 
 <script src="script.js"></script>
