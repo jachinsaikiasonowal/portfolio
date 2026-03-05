@@ -586,18 +586,16 @@ function initActiveNav(){
 })();
 
 /* ═══════════════════════════════════════════════════════════════
-   SONOWAL DATA STREAM + EMBER PARTICLES
+   SONOWAL DATA STREAM — text scramble only
 ═══════════════════════════════════════════════════════════════ */
 (function(){
   var el=document.getElementById('sonowal-el');
-  var pc=document.getElementById('particle-canvas');
   if(!el) return;
   var STREAM='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ#@$%&';
   var original='SONOWAL', streaming=false;
 
   el.addEventListener('mouseenter',function(){
     if(streaming) return; streaming=true;
-    /* Text scramble */
     var iters=0, max=original.length*5;
     var iv=setInterval(function(){
       var d=original.split('').map(function(c,i){
@@ -606,39 +604,6 @@ function initActiveNav(){
       el.textContent=d; iters++;
       if(iters>=max){clearInterval(iv);el.textContent=original;streaming=false;}
     },38);
-
-    /* Ember particles */
-    if(!pc) return;
-    pc.width=pc.offsetWidth; pc.height=pc.offsetHeight;
-    var ctx=pc.getContext('2d');
-    var er=el.getBoundingClientRect(), cr=pc.getBoundingClientRect();
-    var ox=er.left-cr.left+er.width/2, oy=er.top-cr.top;
-    var parts=[];
-    for(var i=0;i<50;i++){
-      parts.push({
-        x:ox+(Math.random()-.5)*er.width,
-        y:oy+(Math.random()-.5)*4,
-        vx:(Math.random()-.5)*3.5,
-        vy:-(Math.random()*5+1.5),
-        life:1, sz:Math.random()*3.5+1.5
-      });
-    }
-    (function anim(){
-      ctx.clearRect(0,0,pc.width,pc.height);
-      var alive=false;
-      parts.forEach(function(p){
-        p.x+=p.vx; p.y+=p.vy; p.vy+=0.09; p.life-=0.022;
-        if(p.life>0){
-          alive=true;
-          ctx.save(); ctx.globalAlpha=p.life;
-          ctx.fillStyle=p.life>0.5?'rgba(232,201,106,1)':'rgba(201,168,76,0.7)';
-          ctx.fillRect(p.x-p.sz/2,p.y-p.sz/2,p.sz,p.sz);
-          ctx.restore();
-        }
-      });
-      if(alive) requestAnimationFrame(anim);
-      else ctx.clearRect(0,0,pc.width,pc.height);
-    })();
   });
 })();
 
@@ -781,14 +746,7 @@ function initAmbientHUD(){
     },25);
     hideT=setTimeout(function(){ hud.classList.remove('ahud-on'); },4000);
   }
-  new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting&&HUD[e.target.id]&&e.target.id!==current){
-        current=e.target.id; showMsg(HUD[e.target.id]);
-      }
-    });
-  },{threshold:0.3}).observe(document.querySelector('section[id]')||document.body); // init
-  // Observe all sections
+  // One observer per section — no duplicates
   document.querySelectorAll('section[id]').forEach(function(s){
     new IntersectionObserver(function(entries){
       entries.forEach(function(e){
