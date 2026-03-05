@@ -202,6 +202,7 @@ h2.s-title {
   line-height: 0.95;
   color: var(--white);
   margin-bottom: 20px;
+  contain: layout;  /* ✅ ADD THIS ONE LINE */
 }
 
 .s-sub {
