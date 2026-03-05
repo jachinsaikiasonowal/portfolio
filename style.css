@@ -1854,71 +1854,26 @@ footer { justify-content:space-between; }
 /* ═══════════════════════════════════════════════
    TYPING ANIMATION
 ═══════════════════════════════════════════════ */
+/* TYPING ANIMATION - JAVASCRIPT DRIVEN */
 #typing-text {
-  display: inline-block;
-  overflow: hidden;
-  border-right: 3px solid var(--gold);
-  white-space: nowrap;
-  animation: typing 4s steps(50, end), blink-cursor 0.75s step-end infinite;
+  display: inline;
+  color: var(--white);
 }
 
 .typing-cursor {
   display: inline-block;
-  width: 3px;
-  height: 1.2em;
-  background: var(--gold);
-  margin-left: 4px;
-  vertical-align: middle;
-  animation: blink-cursor 0.75s step-end infinite;
+  color: var(--gold);
+  font-weight: bold;
+  margin-left: 2px;
+  animation: blink 0.7s infinite;
 }
 
-@keyframes typing {
-  0% {
-    width: 0;
-  }
-  100% {
-    width: 100%;
-  }
-}
-
-@keyframes blink-cursor {
-  0%, 49% {
-    opacity: 1;
-  }
-  50%, 100% {
-    opacity: 0;
-  }
-}
-
-/* Optional: Remove animation after completion */
-#typing-text.complete {
-  animation: none;
-  border-right: none;
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 .typing-cursor.complete {
   animation: none;
-}
-
-/* ═══════════════════════════════════════════════
-   CLOUDINARY PROFILE PHOTO
-═══════════════════════════════════════════════ */
-.photo-img {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: var(--black3);
-}
-
-.photo-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  transition: opacity 0.3s ease;
-}
-
-.photo-img img:hover {
-  opacity: 0.9;
+  opacity: 0;
 }
