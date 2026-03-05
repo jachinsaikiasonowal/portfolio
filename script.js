@@ -180,18 +180,40 @@ function startScramble() {
       var el = entry.target;
       if (el.dataset.scrambled) return;
       el.dataset.scrambled = '1';
-      var orig = el.textContent.replace(/\s+/g,' ').trim();
-      var origHTML = el.innerHTML; // preserve <br> tags and structure
-      el.dataset.orig = orig;
-      // Lock min-height before animation so <br> removal never causes layout shift
+      var origHTML = el.innerHTML;
+      var hasBR = /<br\s*\/?>/i.test(origHTML);
+      // Lock height before animation to prevent layout shift
       el.style.minHeight = el.offsetHeight + 'px';
       setTimeout(function(){
-        scramble(el, orig, 700, function(){
-          // Restore original innerHTML (with <br> tags) once scramble completes
-          el.innerHTML = origHTML;
-          // Release height lock after structure is restored
-          setTimeout(function(){ el.style.minHeight = ''; }, 50);
-        });
+        if (hasBR) {
+          // Split by <br>, scramble each line independently — structure preserved throughout
+          var lines = origHTML.split(/<br\s*\/?>/i).map(function(l){ return l.trim(); });
+          var t0 = null, dur = 700;
+          (function step(ts){
+            if(!t0) t0 = ts;
+            var p = Math.min((ts-t0)/dur, 1);
+            var parts = lines.map(function(line){
+              var rev = Math.floor(p * line.length), out = '';
+              for(var i=0;i<line.length;i++){
+                out += i < rev ? line[i] : CHARS[Math.floor(Math.random()*CHARS.length)];
+              }
+              return out;
+            });
+            el.innerHTML = parts.join('<br>');
+            if(p < 1) { requestAnimationFrame(step); }
+            else {
+              el.innerHTML = origHTML;
+              setTimeout(function(){ el.style.minHeight = ''; }, 50);
+            }
+          })(performance.now());
+        } else {
+          // No line breaks — original single-line scramble
+          var orig = el.textContent.replace(/\s+/g,' ').trim();
+          scramble(el, orig, 700, function(){
+            el.innerHTML = origHTML;
+            setTimeout(function(){ el.style.minHeight = ''; }, 50);
+          });
+        }
       }, 100);
       hIO.unobserve(el);
     });
@@ -879,5 +901,5 @@ function closeTerminal(){
   console.log('%cGrowth Marketer · AI Agent Engineer · Founder of PromptOps',gr+'font-size:10px;');
   console.log('%c──────────────────────────────────────────',gr);
   console.log('%c  ✓ Available · $150K+ revenue · 247+ PromptOps waitlist',w+'font-size:12px;');
-  console.log('%c💡 Type "JACHIN" on the page to open JACHIN_OS terminal.',g+'font-size:12px;font-weight:700;');
+  console.log('%c$ jachin --boot\n%c> JACHIN_OS v2026.1 initialized\n%c> awaiting input_',g+'font-size:11px;',g+'font-size:11px;',g+'font-size:12px;font-weight:700;');
 })();
