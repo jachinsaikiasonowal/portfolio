@@ -153,12 +153,22 @@ function startScramble() {
       if (el.dataset.scrambled) return;
       el.dataset.scrambled = '1';
       var orig = el.textContent.replace(/\s+/g,' ').trim();
+      var origHTML = el.innerHTML; // preserve <br> tags and structure
       el.dataset.orig = orig;
-      setTimeout(function(){ scramble(el, orig, 700); }, 100);
+      // Lock min-height before animation so <br> removal never causes layout shift
+      el.style.minHeight = el.offsetHeight + 'px';
+      setTimeout(function(){
+        scramble(el, orig, 700, function(){
+          // Restore original innerHTML (with <br> tags) once scramble completes
+          el.innerHTML = origHTML;
+          // Release height lock after structure is restored
+          setTimeout(function(){ el.style.minHeight = ''; }, 50);
+        });
+      }, 100);
       hIO.unobserve(el);
     });
   }, { threshold:0.5 });
-  document.querySelectorAll('.s-title-text').forEach(function(h){ hIO.observe(h); });
+  document.querySelectorAll('h2.s-title').forEach(function(h){ hIO.observe(h); });
 }
 
 /* ─────────────────────────────────────────────
@@ -884,51 +894,4 @@ function closeTerminal(){
   console.log('%c──────────────────────────────────────────',gr);
   console.log('%c  ✓ Available · $150K+ revenue · 247+ PromptOps waitlist',w+'font-size:12px;');
   console.log('%c💡 Type "JACHIN" on the page to open JACHIN_OS terminal.',g+'font-size:12px;font-weight:700;');
-})();
-
-// ═══════════════════════════════════════════════
-// TYPING ANIMATION
-// ═══════════════════════════════════════════════
-// CYCLING TYPING ANIMATION - WITH CURSOR
-(function() {
-  var el = document.getElementById('type-roles');
-  var cursor = document.querySelector('.type-cursor');
-  if (!el || !cursor) return;
-  
-  var roles = [
-    'Growth Marketer',
-    'AI Agent Engineer',
-    'Newsletter Founder',
-    'Marketing Ops',
-    'PromptOps Creator'
-  ];
-  
-  var roleIndex = 0, charIndex = 0, deleting = false;
-
-  function type() {
-    var currentRole = roles[roleIndex];
-    
-    if (!deleting) {
-      el.textContent = currentRole.slice(0, ++charIndex);
-      cursor.style.opacity = '1';  // Show cursor while typing
-      if (charIndex === currentRole.length) { 
-        deleting = true; 
-        setTimeout(type, 2200); 
-        return; 
-      }
-      setTimeout(type, 80);
-    } else {
-      el.textContent = currentRole.slice(0, --charIndex);
-      if (charIndex === 0) { 
-        cursor.style.opacity = '0';  // Hide cursor when done deleting
-        deleting = false; 
-        roleIndex = (roleIndex + 1) % roles.length; 
-        setTimeout(type, 400); 
-        return; 
-      }
-      setTimeout(type, 40);
-    }
-  }
-  
-  setTimeout(type, 1200);
 })();
