@@ -203,6 +203,8 @@ h2.s-title {
   color: var(--white);
   margin-bottom: 20px;
   contain: layout;  /* ✅ ADD THIS ONE LINE */
+    overflow: hidden;  /* ✅ ADD THIS - Clips text to box */
+  display: block;    /* ✅ ADD THIS - Proper container */
 }
 
 .s-sub {
