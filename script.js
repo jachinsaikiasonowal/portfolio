@@ -158,7 +158,7 @@ function startScramble() {
       hIO.unobserve(el);
     });
   }, { threshold:0.5 });
-  document.querySelectorAll('h2.s-title').forEach(function(h){ hIO.observe(h); });
+  document.querySelectorAll('.s-title-text').forEach(function(h){ hIO.observe(h); });
 }
 
 /* ─────────────────────────────────────────────

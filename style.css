@@ -202,14 +202,16 @@ h2.s-title {
   line-height: 0.95;
   color: var(--white);
   margin-bottom: 20px;
-  contain: layout;  /* ✅ ADD THIS ONE LINE */
-    overflow: hidden;  /* ✅ ADD THIS - Clips text to box */
-  display: block;    /* ✅ ADD THIS - Proper container */
-    white-space: nowrap;  /* ✅ ADD - Prevents wrapping */
-  width: 100%;  /* ✅ ADD - Fixed width */
-  max-width: 100%;  /* ✅ ADD - Prevent overflow */
-}
 
+  contain: layout;
+  overflow: hidden;
+}
+.s-title-text {
+  display: inline-block;
+  white-space: nowrap;
+  font-variant-ligatures: none;
+  min-width: 14ch;
+}
 .s-sub {
   font-size: 16px; font-weight: 300;
   color: var(--grey2); line-height: 1.7;
