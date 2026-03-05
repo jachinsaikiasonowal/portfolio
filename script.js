@@ -890,27 +890,34 @@ function closeTerminal(){
 // TYPING ANIMATION
 // ═══════════════════════════════════════════════
 
-const textToType = "Growth Marketer · AI Builder · Product Operator · Founder";
-const typingElement = document.getElementById('typing-text');
-const cursor = document.querySelector('.typing-cursor');
-let index = 0;
+// CYCLING TYPING ANIMATION
+(function() {
+  var el = document.getElementById('type-roles');
+  if (!el) return;
+  
+  var roles = [
+    'Growth Marketer',
+    'AI Agent Engineer',
+    'Newsletter Founder',
+    'Marketing Ops',
+    'PromptOps Creator'
+  ];
+  
+  var roleIndex = 0, charIndex = 0, deleting = false;
 
-function typeText() {
-  if (index < textToType.length) {
-    typingElement.textContent += textToType.charAt(index);
-    index++;
-    setTimeout(typeText, 80); // 80ms delay between characters (adjust for speed)
-  } else {
-    // Animation complete - remove cursor animation
-    typingElement.classList.add('complete');
-    if (cursor) cursor.classList.add('complete');
+  function type() {
+    var currentRole = roles[roleIndex];
+    
+    if (!deleting) {
+      el.textContent = currentRole.slice(0, ++charIndex);
+      if (charIndex === currentRole.length) { deleting = true; setTimeout(type, 2200); return; }
+      setTimeout(type, 80);
+    } else {
+      el.textContent = currentRole.slice(0, --charIndex);
+      if (charIndex === 0) { deleting = false; roleIndex = (roleIndex + 1) % roles.length; setTimeout(type, 400); return; }
+      setTimeout(type, 40);
+    }
   }
-}
-
-// Start typing when page loads
-document.addEventListener('DOMContentLoaded', function() {
-  typeText();
-});
-
-// Or if you prefer it to start after a delay:
-// setTimeout(() => typeText(), 500); // 500ms delay before starting
+  
+  setTimeout(type, 1200);
+})();
