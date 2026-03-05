@@ -111,10 +111,6 @@
     <div class="hud-readout hr-br">
       <span class="hud-key">VER</span><span class="hud-val">2026.1</span>
     </div>
-    <!-- CMD prompt — easter egg trigger, no written instruction -->
-    <div class="hud-readout hr-cmd" onclick="openTerminal()" aria-hidden="false" title="">
-      <span class="hud-key">CMD</span><span class="hud-cmd-cursor">›_</span>
-    </div>
   </div>
 
   <!-- ⑧ OPERATIONS DASHBOARD PANEL — fixed to right edge -->
@@ -244,7 +240,16 @@
     </div>
   </div>
   <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <!-- CMD terminal trigger — standalone outside hud-frame (no pointer-events:none inheritance) -->
+  <div id="term-trigger" onclick="openTerminal()">
+    <span class="tt-label">CMD</span>
+    <span class="tt-cursor">›_</span>
+  </div>
 </section>
+
+<!-- MOBILE TERMINAL BUTTON — fixed, always visible on touch -->
+<button id="mob-term-btn" onclick="openTerminal()" aria-label="Open JACHIN_OS terminal">›_</button>
 
 <!-- MARQUEE STRIP -->
 <div id="strip" aria-hidden="true">
