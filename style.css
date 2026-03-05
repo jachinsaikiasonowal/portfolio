@@ -1919,8 +1919,8 @@ footer { justify-content:space-between; }
 
 /* MOBILE PERFORMANCE */
 @media (max-width: 768px) {
-  * { animation-duration: 0.1s !important; }
-  * { transition: none !important; }
+  *:not(#loader):not(#loader *) { animation-duration: 0.1s !important; }
+  *:not(#loader):not(#loader *) { transition: none !important; }
   .particle { display: none; }
   a:hover { transform: none !important; }
 }
