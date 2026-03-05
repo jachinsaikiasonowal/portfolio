@@ -363,12 +363,12 @@ h2.s-title {
 .btn-ghost:hover { color: var(--white); border-color: var(--gold); }
 
 .hero-stats {
-  display: flex; gap: 0; flex-wrap: wrap;
+  display: flex; gap: 0; flex-wrap: nowrap;
   border-top: 1px solid var(--border);
   padding-top: 32px;
 }
-.hstat { padding-right: 40px; margin-right: 40px; border-right: 1px solid var(--border); }
-.hstat:last-child { border-right: none; margin-right: 0; }
+.hstat { padding-right: 28px; margin-right: 28px; border-right: 1px solid var(--border); flex-shrink: 0; }
+.hstat:last-child { border-right: none; margin-right: 0; padding-right: 0; }
 .hstat-num {
   font-family: var(--font-d);
   font-size: 36px; letter-spacing: 1px;
@@ -525,10 +525,19 @@ h2.s-title {
 
 /* ─── About Chips — clean horizontal flow ─── */
 .about-chips {
-  display: flex; flex-wrap: wrap; gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin-top: 36px;
-  align-items: center;
 }
+
+.chips-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
 .achip {
   display: inline-flex; align-items: center; gap: 8px;
   border: 1px solid var(--border);
@@ -540,37 +549,21 @@ h2.s-title {
   transition: all 0.2s; white-space: nowrap;
 }
 .achip:hover { border-color: var(--gold); color: var(--gold); }
-/* ─── ABOUT CHIPS — Restructured Layout ─── */
-.about-chips {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-top: 36px;
-}
-
-.chips-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-}
 
 /* ─── PromptOps Hero CTA ─── */
 .chip-promptops {
   will-change: transform;
-  display: inline-flex;
-  width: fit-content;
-  max-width: 340px;
+  display: flex;
+  width: 100%;
   background: linear-gradient(135deg, rgba(201,168,76,0.12) 0%, rgba(201,168,76,0.04) 100%);
   border: 1px solid var(--gold);
   border-radius: 4px;
-  padding: 12px 20px;
+  padding: 14px 20px;
   text-decoration: none;
   color: var(--gold);
   position: relative;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-  /* Outer glow pulse */
   animation: promptopsPulse 3s ease-in-out infinite;
 }
 
@@ -628,7 +621,7 @@ h2.s-title {
   50%       { transform: scaleX(1);   opacity: 1; }
 }
 
-.chip-po-inner { display: flex; flex-direction: column; gap: 4px; }
+.chip-po-inner { display: flex; flex-direction: column; gap: 4px; width: 100%; }
 
 .chip-po-top {
   display: flex; justify-content: space-between; align-items: center;
@@ -668,17 +661,21 @@ h2.s-title {
 
 /* ─── Product chips (Newsletter, Bundle) ─── */
 .achip-product {
-  display: inline-flex; align-items: center; gap: 8px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   border-color: rgba(201,168,76,0.25) !important;
   color: var(--grey2) !important;
   padding: 10px 18px;
   transition: all 0.2s;
+  flex: 1;
 }
 .achip-product:hover {
   border-color: var(--gold) !important;
   color: var(--white) !important;
   background: rgba(201,168,76,0.05);
 }
+
+/* Contact + status rows stretch full width */
+.chips-row .achip { flex: 1; justify-content: center; }
 .achip-icon { font-size: 14px; }
 .achip-stat {
   font-family: var(--font-c); font-size: 9px;
@@ -696,7 +693,9 @@ h2.s-title {
   font-size: 10px !important;
   letter-spacing: 1.5px !important;
   opacity: 0.8;
-  cursor: none;
+  cursor: default;
+  flex: 1;
+  justify-content: center;
 }
 .achip-status:hover {
   border-color: var(--border) !important;
