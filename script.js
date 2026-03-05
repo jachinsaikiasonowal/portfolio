@@ -889,11 +889,11 @@ function closeTerminal(){
 // ═══════════════════════════════════════════════
 // TYPING ANIMATION
 // ═══════════════════════════════════════════════
-
-// CYCLING TYPING ANIMATION
+// CYCLING TYPING ANIMATION - WITH CURSOR
 (function() {
   var el = document.getElementById('type-roles');
-  if (!el) return;
+  var cursor = document.querySelector('.type-cursor');
+  if (!el || !cursor) return;
   
   var roles = [
     'Growth Marketer',
@@ -910,11 +910,22 @@ function closeTerminal(){
     
     if (!deleting) {
       el.textContent = currentRole.slice(0, ++charIndex);
-      if (charIndex === currentRole.length) { deleting = true; setTimeout(type, 2200); return; }
+      cursor.style.opacity = '1';  // Show cursor while typing
+      if (charIndex === currentRole.length) { 
+        deleting = true; 
+        setTimeout(type, 2200); 
+        return; 
+      }
       setTimeout(type, 80);
     } else {
       el.textContent = currentRole.slice(0, --charIndex);
-      if (charIndex === 0) { deleting = false; roleIndex = (roleIndex + 1) % roles.length; setTimeout(type, 400); return; }
+      if (charIndex === 0) { 
+        cursor.style.opacity = '0';  // Hide cursor when done deleting
+        deleting = false; 
+        roleIndex = (roleIndex + 1) % roles.length; 
+        setTimeout(type, 400); 
+        return; 
+      }
       setTimeout(type, 40);
     }
   }
