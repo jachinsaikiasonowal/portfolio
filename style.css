@@ -312,7 +312,16 @@ h2.s-title {
   opacity: 0.4;
 }
 .hero-name .gold { color: var(--gold); -webkit-text-stroke: 0; }
+.hero-title {
+  min-height: 1.5em;
+  min-width: 400px;
+  position: relative;
+}
 
+#type-roles {
+  display: inline-block;
+  min-width: 350px;
+}
 .hero-title {
   display: flex; align-items: center; gap: 16px;
   font-family: var(--font-c);
@@ -1876,7 +1885,7 @@ footer { justify-content:space-between; }
   width: 3px;
   height: 1.2em;
   background: var(--gold);
-  margin-left: 4px;
+  margin-left: 1px;
   vertical-align: text-bottom;
   animation: cursor-blink 0.7s infinite;
 }
