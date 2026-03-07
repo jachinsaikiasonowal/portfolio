@@ -31,7 +31,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  cursor: none;
+  /* cursor managed by pointer media query below */
 }
 
 /* ═══════════════════════════════════════════════
@@ -63,7 +63,7 @@ body.cursor-click #cursor  { width: 6px; height: 6px; }
 body.cursor-click #cursor-ring { width: 24px; height: 24px; }
 
 /* All interactive elements must propagate cursor tracking */
-a, button, .exp-item, .pcard, .svc, .vcard, .cs-card { cursor: none !important; }
+/* cursor:none scoped to true pointer devices only */
 
 /* ═══════════════════════════════════════════════
    SCROLLBAR
@@ -1070,9 +1070,13 @@ h2.s-title {
    SKILLS
 ═══════════════════════════════════════════════ */
 #skills { background: var(--black2); }
-.skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border2); }
-.sb:last-child { grid-column: 1 / -1; }
-.sb:last-child .stags { max-width: 900px; }
+/* ── Skills: 4-column symmetric grid, 2 perfect rows ── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border2);
+}
 .sb { background: var(--black2); padding: 32px; transition: background 0.3s; }
 .sb:hover { background: var(--black3); }
 .sb-title {
@@ -1588,7 +1592,8 @@ section + section { margin-top: 0; }
   .wrap { padding: 0 20px; }
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
   .metrics-row { grid-template-columns: repeat(3, 1fr); }
-  .services-grid, .skills-grid, .port-grid, .certs-grid, .tgrid, .edu-grid { grid-template-columns: 1fr; }
+  .services-grid, .port-grid, .certs-grid, .tgrid, .edu-grid { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .svc:last-child { flex-direction: column; gap: 16px; }
   .svc:last-child .svc-desc { max-width: 100%; }
   .exp-results { grid-template-columns: repeat(2, 1fr); }
@@ -2142,7 +2147,22 @@ section::after {
 
 /* ACCESSIBILITY */
 @media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; }
+  * { animation: none !important; transition: none !important; 
+  /* Stop all canvas animations */
+  canvas { display: none !important; }
+  /* Stop ticker */
+  #rev-ticker { animation: none !important; }
+  /* Stop orbs */
+  .hero-orb { animation: none !important; opacity: 0.3; }
+  /* Stop scan line */
+  .scan-line { animation: none !important; display: none; }
+  /* Reduce all transitions */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 }
 
 /* ═══════════════════════════════════════════════
@@ -2560,3 +2580,125 @@ a, button { touch-action: manipulation; }
   color: var(--gold2);
   opacity: 0.8;
 }
+
+/* ─── CURSOR: none only on real pointer devices ──────────────── */
+@media (pointer: fine) {
+  body,
+  a, button, .exp-item, .pcard, .svc, .vcard, .cs-card,
+  .nav-logo, .nav-links a, .nav-cta, .btn-ghost, .btn-primary,
+  .achip, .cs-card, .po-cta {
+    cursor: none !important;
+  }
+}
+@media (pointer: coarse), (hover: none) {
+  body, * { cursor: auto !important; }
+  #crosshair, #crosshair-dot { display: none !important; }
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   PREMIUM SECTION DIVIDER  (replaces minion dividers)
+═══════════════════════════════════════════════════════ */
+.sdp-wrap {
+  display: flex;
+  align-items: center;
+  padding: 72px 60px;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 0;
+}
+.sdp-rule {
+  flex: 1;
+  height: 1px;
+}
+.sdp-wrap .sdp-rule:first-of-type {
+  background: linear-gradient(to right, transparent 0%, rgba(201,168,76,0.08) 20%, rgba(201,168,76,0.28) 100%);
+}
+.sdp-wrap .sdp-rule:last-of-type {
+  background: linear-gradient(to left, transparent 0%, rgba(201,168,76,0.08) 20%, rgba(201,168,76,0.28) 100%);
+}
+.sdp-sigil {
+  flex-shrink: 0;
+  padding: 0 32px;
+  opacity: 0;
+  transform: scale(0.78);
+  transition: opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1);
+}
+.sdp-sigil.sdp-in {
+  opacity: 1;
+  transform: scale(1);
+}
+@keyframes sigilPulse {
+  0%, 100% { opacity: 0.9; }
+  50%       { opacity: 0.4; }
+}
+.sdp-sigil circle:last-of-type {
+  animation: sigilPulse 3.2s ease-in-out infinite;
+}
+@media (max-width: 768px) {
+  .sdp-wrap { padding: 52px 20px; }
+  .sdp-sigil { padding: 0 20px; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   CALENDLY BOOK A CALL BUTTON
+═══════════════════════════════════════════════════════ */
+.btn-calendly {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 26px;
+  font-family: var(--font-c);
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--gold2);
+  border: 1px solid rgba(201,168,76,0.38);
+  background: rgba(201,168,76,0.05);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.25s, background 0.25s, transform 0.2s;
+  white-space: nowrap;
+}
+.btn-calendly::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(201,168,76,0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.btn-calendly:hover {
+  border-color: rgba(201,168,76,0.7);
+  background: rgba(201,168,76,0.11);
+  transform: translateY(-1px);
+}
+.btn-calendly:hover::before { opacity: 1; }
+@media (max-width: 540px) {
+  .skills-grid { grid-template-columns: 1fr; }
+  .btn-calendly { width: 100%; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   PROFESSIONAL / SOFT SKILLS BLOCK
+═══════════════════════════════════════════════════════ */
+/* ── sb-foundations: Professional Skills block ── */
+.sb-foundations {
+  /* matches sibling blocks exactly — no special treatment needed */
+}
+/* Icon-enhanced tags — subtle gold tint */
+.stag-f {
+  display: inline-flex;
+  align-items: center;
+  color: var(--gold2);
+  border-color: rgba(201,168,76,0.2);
+}
+.stag-f:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+/* Hide all leftover minion CSS classes */
+.cut-label-minion, .minion-icon, .minion-icon-r,
+.banana-icon, .banana-icon-r, .cut-label-vibe { display: none !important; }

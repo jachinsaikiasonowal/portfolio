@@ -1,3 +1,7 @@
+
+// ─── Respect prefers-reduced-motion ─────────────────────────
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* ═══════════════════════════════════════════════════════════════
    JACHIN SAIKIA SONOWAL — Portfolio Script
    Full build: Agent Network + all 36 creative direction features
@@ -80,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (!cntEl) { setTimeout(fireLoader, 600); return; }
   var start = null, dur = 1000;
   function tick(ts) {
+    if (document.hidden) { return; }
     if (!start) start = ts;
     var p = Math.min((ts - start) / dur, 1);
     cntEl.textContent = Math.floor(p * 100);
@@ -494,6 +499,7 @@ function initActiveNav(){
   }
 
   function draw() {
+    if (document.hidden) { return; }
     ctx.clearRect(0,0,W,H);
     frame++;
     if (frame%85===0) spawnPacket();
@@ -793,6 +799,7 @@ function initRevTicker(){
   /* Live clock */
   var clk=document.getElementById('f-clock');
   function tick(){
+    if (document.hidden) { return; }
     if(!clk) return;
     var n=new Date(),h=n.getHours(),m=n.getMinutes(),s=n.getSeconds();
     var ap=h>=12?'PM':'AM'; h=h%12||12;
@@ -999,6 +1006,7 @@ function closeTerminal(){
   }
 
   function draw() {
+    if (document.hidden) { return; }
     ctx.clearRect(0, 0, W, H);
     t += .007;
 
@@ -1157,3 +1165,11 @@ function closeTerminal(){
   var card = document.querySelector('.ais-stats-card');
   if (card) io.observe(card);
 })();
+
+// ─── Pause animations when tab is not visible ────────────────
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+    // All rAF loops self-pause via document.hidden check
+    // Pause any audio/video if present
+  }
+});
