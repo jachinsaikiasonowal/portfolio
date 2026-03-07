@@ -249,8 +249,14 @@ function initCounters() {
     entries.forEach(function(e){
       if(e.isIntersecting && e.target.dataset.target){ animCounter(e.target); io.unobserve(e.target); }
     });
-  },{ threshold:0.3 });
-  document.querySelectorAll('[data-target]').forEach(function(el){ io.observe(el); });
+  },{ threshold:0.05, rootMargin:'0px 0px 300px 0px' });
+  var fired=new Set();
+  document.querySelectorAll('[data-target]').forEach(function(el){
+    var r=el.getBoundingClientRect();
+    if(r.top < window.innerHeight+400) setTimeout(function(){ if(!fired.has(el)){fired.add(el);animCounter(el);} },300);
+    else io.observe(el);
+  });
+  setTimeout(function(){ document.querySelectorAll('[data-target]').forEach(function(el){ if(!fired.has(el)){fired.add(el);animCounter(el);} }); },3000);
 }
 
 /* ─────────────────────────────────────────────
