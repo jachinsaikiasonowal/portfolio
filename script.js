@@ -903,3 +903,251 @@ function closeTerminal(){
   console.log('%c  ✓ Available · $150K+ revenue · 247+ PromptOps waitlist',w+'font-size:12px;');
   console.log('%c$ jachin --boot\n%c> JACHIN_OS v2026.1 initialized\n%c> awaiting input_',g+'font-size:11px;',g+'font-size:11px;',g+'font-size:12px;font-weight:700;');
 })();
+
+
+/* ══════════════════════════════════════════════════════════
+   AI SYSTEMS — AGENT NETWORK CANVAS
+══════════════════════════════════════════════════════════ */
+(function() {
+  var canvas  = document.getElementById('network-canvas');
+  var wrap    = document.getElementById('network-wrap');
+  var tip     = document.getElementById('agent-tip');
+  if (!canvas || !wrap) return;
+  var ctx = canvas.getContext('2d');
+  var W, H;
+  var hovered = -1;
+  var t = 0;
+  var pulses  = [];
+
+  /* ── AGENT DATA ── */
+  var AGENTS = [
+    // Content — left arc
+    { n:'RADAR',        d:'content',      r:'Monitors 30+ sources · relevance-scored digest delivered daily',     p:96,  x:.10, y:.20 },
+    { n:'CAPTURE',      d:'content',      r:'Thought inbox — voice, text, screenshot → structured note',          p:94,  x:.06, y:.38 },
+    { n:'SCRIBE',       d:'content',      r:'Research-to-newsletter pipeline · 60% writing time reduction',       p:98,  x:.13, y:.55 },
+    { n:'HERALD',       d:'content',      r:'Formats and publishes to Beehiiv on schedule · never late',          p:100, x:.19, y:.70 },
+    { n:'REMIX',        d:'content',      r:'One newsletter → 9 platform-native content pieces automatically',    p:94,  x:.10, y:.84 },
+    { n:'PULSE',        d:'content',      r:'Schedules cross-platform posts at optimal send times',               p:91,  x:.04, y:.63 },
+    { n:'GHOST',        d:'content',      r:'SEO articles auto-published to Ghost + URLs submitted to GSC',       p:89,  x:.04, y:.24 },
+    // Revenue — top right
+    { n:'LENS',         d:'revenue',      r:'Analytics aggregation — Monday morning brief with trends & flags',   p:92,  x:.87, y:.16 },
+    { n:'CLOSER',       d:'revenue',      r:'Writes sponsorship pitches and outreach sequences in my voice',      p:91,  x:.94, y:.32 },
+    { n:'SCOUT',        d:'revenue',      r:'Scans affiliates, grants, partnerships — curated list Thursdays',    p:88,  x:.90, y:.48 },
+    { n:'INTEL',        d:'revenue',      r:'Competitor content gap analysis — surfaces opportunities early',     p:87,  x:.83, y:.60 },
+    // Build — right side pipeline
+    { n:'MASTER-BUILD', d:'build',        r:'Reads system memory, identifies next build target, allocates context', p:96, x:.72, y:.14 },
+    { n:'FORGE',        d:'build',        r:'Backend: routes, schemas, services — complete production-ready files', p:95, x:.78, y:.32 },
+    { n:'PIXEL',        d:'build',        r:'Frontend: React components and CSS to design system spec',            p:94, x:.68, y:.46 },
+    { n:'PROBE',        d:'build',        r:'Automated test runner — hard PASS/FAIL gate before anything ships',   p:88, x:.76, y:.62 },
+    { n:'CLAW',         d:'build',        r:'Debug-only — fires on PROBE failure, diagnoses before re-queuing',    p:90, x:.84, y:.76 },
+    { n:'SCRIBE-BUILD', d:'build',        r:'Documents context, updates system memory, commits to git',            p:99, x:.67, y:.78 },
+    // Personal — bottom centre-left
+    { n:'HUNT',         d:'personal',     r:'Surfaces filtered opportunities twice weekly — already matched',       p:87, x:.30, y:.90 },
+    { n:'APPLY',        d:'personal',     r:'Tailored CV + cover letter per role — one input, ready to send',      p:93, x:.43, y:.94 },
+    { n:'REPLY',        d:'personal',     r:'Drafts email responses in my documented voice and preferences',        p:85, x:.56, y:.90 },
+    // Intelligence — top centre
+    { n:'EVOLVE',       d:'intelligence', r:'Reviews all agent outputs weekly · drafts improvements for approval',  p:91, x:.38, y:.07 },
+    { n:'ORACLE',       d:'intelligence', r:'Monthly knowledge compression — archives sessions, defragments memory', p:92, x:.50, y:.11 },
+    { n:'GENESIS',      d:'intelligence', r:'Designs new agent roles when system gaps are detected',               p:89, x:.62, y:.06 },
+    // Security — centre hub
+    { n:'JACHIN',       d:'security',     r:'Master router — all commands pass through here · access enforcement 24/7', p:98, x:.50, y:.47 },
+    { n:'GUARDIAN',     d:'security',     r:'Filters injection attempts + validates brand voice before publish',    p:97, x:.41, y:.34 },
+    { n:'WATCHDOG',     d:'security',     r:'Health check every 6h — error alerts via Telegram · auto-triage',    p:96, x:.59, y:.34 },
+  ];
+
+  var DCOL = {
+    content:     '#C9A84C',
+    revenue:     '#4ade80',
+    build:       '#60a5fa',
+    personal:    '#c084fc',
+    intelligence:'#fb923c',
+    security:    '#f87171'
+  };
+
+  /* ── CONNECTIONS (real data flows) ── */
+  var CONNS = [
+    [0,2,1],[1,2,.7],[2,3,.95],[2,4,.9],[4,5,.8],[6,2,.5],  // content pipeline
+    [7,23,.8],[8,23,.6],[9,23,.5],[10,23,.5],               // revenue → JACHIN
+    [11,12,.9],[11,13,.9],[12,14,.95],[13,14,.95],           // build pipeline
+    [14,15,.7],[14,16,.9],[15,11,.5],                        // probe → claw/scribe
+    [20,23,.8],[21,23,.7],[22,23,.5],                        // intelligence → JACHIN
+    [23,24,.95],[23,25,.95],                                 // JACHIN → guardian/watchdog
+    [24,3,.7],[25,0,.6],                                     // guardian → herald, watchdog → radar
+    [23,0,.7],[23,11,.7],[23,17,.6],                         // JACHIN dispatches
+    [0,20,.4],[3,20,.4],[12,21,.4],                          // feedback to intelligence
+  ];
+
+  function resize() {
+    W = canvas.width  = wrap.clientWidth;
+    H = canvas.height = wrap.clientHeight;
+  }
+
+  function getNode(i) {
+    var a = AGENTS[i];
+    return { px: a.x * W, py: a.y * H };
+  }
+
+  function spawnPulse() {
+    var ci = Math.floor(Math.random() * CONNS.length);
+    pulses.push({ ci: ci, prog: 0 });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += .007;
+
+    // Spawn
+    if (Math.random() < .045) spawnPulse();
+
+    // Draw connections
+    CONNS.forEach(function(c) {
+      var a = getNode(c[0]), b = getNode(c[1]), w = c[2];
+      ctx.save();
+      ctx.strokeStyle = 'rgba(201,168,76,' + (w * .11) + ')';
+      ctx.lineWidth = w > .85 ? 1.1 : .7;
+      ctx.beginPath(); ctx.moveTo(a.px, a.py); ctx.lineTo(b.px, b.py); ctx.stroke();
+      ctx.restore();
+    });
+
+    // Draw pulses
+    pulses = pulses.filter(function(p) { return p.prog < 1; });
+    pulses.forEach(function(p) {
+      p.prog += .013;
+      var c = CONNS[p.ci];
+      var a = getNode(c[0]), b = getNode(c[1]);
+      var px = a.px + (b.px - a.px) * p.prog;
+      var py = a.py + (b.py - a.py) * p.prog;
+      var alpha = p.prog < .1 ? p.prog * 10 : p.prog > .88 ? (1 - p.prog) * 8.3 : 1;
+      ctx.save();
+      ctx.globalAlpha = alpha * .95;
+      ctx.fillStyle = '#E8C96A';
+      ctx.shadowColor = '#C9A84C'; ctx.shadowBlur = 7;
+      ctx.beginPath(); ctx.arc(px, py, 2.5, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    });
+
+    // Draw nodes
+    AGENTS.forEach(function(ag, i) {
+      var px = ag.x * W, py = ag.y * H;
+      var isHub = ag.n === 'JACHIN';
+      var isSec = ag.d === 'security';
+      var isHov = (i === hovered);
+      var r = isHub ? 12 : (ag.p >= 95 ? 8 : 6.5);
+      var col = DCOL[ag.d];
+
+      // pulse ring
+      if (isHub || isHov || ag.p >= 95) {
+        var pulse = .5 + .5 * Math.sin(t * 1.8 + i * .7);
+        var rr = r + 5 + pulse * (isHub ? 5 : 3) + (isHov ? 5 : 0);
+        ctx.save();
+        ctx.globalAlpha = isHov ? .4 : (isHub ? .28 : .14 + pulse * .07);
+        ctx.strokeStyle = col; ctx.lineWidth = isHub ? 1.5 : 1;
+        ctx.beginPath(); ctx.arc(px, py, rr, 0, Math.PI*2); ctx.stroke();
+        ctx.restore();
+      }
+
+      // Node
+      ctx.save();
+      ctx.globalAlpha = isHov ? 1 : .88;
+      ctx.fillStyle = (isHov || isHub) ? col : '#0d0d0d';
+      ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = col; ctx.lineWidth = isHov ? 1.5 : 1;
+      ctx.stroke();
+      ctx.restore();
+
+      // Label
+      if (isHov || isHub || r >= 8) {
+        ctx.save();
+        ctx.font = (isHub ? 'bold ' : '') + '9px "Barlow Condensed", sans-serif';
+        ctx.fillStyle = isHov ? '#F2EFE8' : col;
+        ctx.globalAlpha = isHov ? 1 : (isHub ? .95 : .72);
+        ctx.textAlign = 'center';
+        ctx.fillText(ag.n, px, py + r + 11);
+        ctx.restore();
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  /* ── HOVER ── */
+  canvas.addEventListener('mousemove', function(e) {
+    var rect = canvas.getBoundingClientRect();
+    var mx = e.clientX - rect.left;
+    var my = e.clientY - rect.top;
+    var found = -1;
+    AGENTS.forEach(function(ag, i) {
+      var px = ag.x * W, py = ag.y * H;
+      var dx = mx - px, dy = my - py;
+      if (Math.sqrt(dx*dx + dy*dy) < 18) found = i;
+    });
+    hovered = found;
+    if (found !== -1) {
+      var ag = AGENTS[found];
+      document.getElementById('at-name').textContent = ag.n;
+      document.getElementById('at-dept').textContent = ag.d.toUpperCase() + ' DEPT';
+      document.getElementById('at-role').textContent = ag.r;
+      document.getElementById('at-perf-fill').style.width = ag.p + '%';
+      document.getElementById('at-perf-num').textContent  = ag.p + '/100';
+      var tx = e.clientX - rect.left + 18;
+      var ty = e.clientY - rect.top - 10;
+      if (tx + 260 > W) tx = tx - 278;
+      if (ty + 120 > H) ty = ty - 120;
+      tip.style.left = tx + 'px';
+      tip.style.top  = ty + 'px';
+      tip.style.opacity = '1';
+      document.body.classList.add('cursor-hover');
+    } else {
+      tip.style.opacity = '0';
+      document.body.classList.remove('cursor-hover');
+    }
+  });
+  canvas.addEventListener('mouseleave', function() {
+    hovered = -1;
+    tip.style.opacity = '0';
+  });
+
+  /* ── INIT on enter viewport ── */
+  var started = false;
+  var io = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting && !started) {
+      started = true;
+      resize();
+      // Seed pulses staggered
+      for (var i = 0; i < 8; i++) {
+        (function(idx) { setTimeout(spawnPulse, idx * 300); })(i);
+      }
+      draw();
+      io.disconnect();
+    }
+  }, { threshold: .1 });
+  io.observe(wrap);
+
+  window.addEventListener('resize', function() {
+    if (started) resize();
+  });
+
+})();
+
+
+/* ══════════════════════════════════════════════════════════
+   AI SYSTEMS — STATS CARD BAR ANIMATION
+══════════════════════════════════════════════════════════ */
+(function() {
+  var fills = document.querySelectorAll('.aisc-fill');
+  if (!fills.length) return;
+  var io = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting) {
+      fills.forEach(function(f) {
+        var w = f.getAttribute('data-w');
+        if (w) setTimeout(function() {
+          f.style.transform = 'scaleX(' + w + ')';
+          f.classList.add('on');
+        }, 450);
+      });
+      io.disconnect();
+    }
+  }, { threshold: 0.2 });
+  var card = document.querySelector('.ais-stats-card');
+  if (card) io.observe(card);
+})();
